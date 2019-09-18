@@ -1,0 +1,14 @@
+---
+- hosts: all
+  connection: ssh
+  become: yes
+  become_user: root
+  gather_facts: no
+  # remote_user: vagrant
+  environment:
+    http_proxy:  "{{ lookup('env','VAGRANT_HTTP_PROXY') }}"
+    https_proxy: "{{ lookup('env','VAGRANT_HTTP_PROXY') }}"
+    no_proxy:    "localhost, 127.0.0.1"
+  roles:
+    - role: rancher-test-node-setup
+      rancher_test_node_setup_user: root

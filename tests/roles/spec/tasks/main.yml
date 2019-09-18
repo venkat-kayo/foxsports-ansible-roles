@@ -1,0 +1,13 @@
+---
+- name: Test ssh connectivity to test nodes
+  shell: "ssh -i {{ rancher_rke_ssh_private_key_fullpath }} -o 'StrictHostKeyChecking=no' root@{{ item }} 'echo success'"
+  become: yes
+  become_user: root
+  register: assert_ssh_connectivity
+  ignore_errors: yes
+  with_items: "{{ rancher_host_list }}"
+
+- name: Assert ssh connectivity
+  assert:
+    that: "{{ item.stdout.find('success') != -1 }}"
+  with_items: "{{ assert_ssh_connectivity.results }}"

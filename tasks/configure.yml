@@ -1,0 +1,19 @@
+---
+- name: Add default configuration file
+  template:
+    src: mysqld.cnf.j2
+    dest: "{{ mysql_config_path }}/mysqld.cnf"
+    owner: "{{ mysql_user }}"
+    group: "{{ mysql_group }}"
+    mode: '0644'
+  notify: Restart mysql
+
+- name: Add custom configuration file
+  template:
+    src: mysql_custom.cnf.j2
+    dest: "{{ mysql_config_path }}/mysql_custom.cnf"
+    owner: "{{ mysql_user }}"
+    group: "{{ mysql_group }}"
+    mode: '0644'
+  when: mysql_custom_config_content != ''
+  notify: Restart mysql

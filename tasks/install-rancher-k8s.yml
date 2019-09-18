@@ -1,0 +1,20 @@
+---
+- name: Decrypt private key for use with rke
+  copy:
+    content: "{{ rancher_rke_ssh_private_key }}"
+    dest: "{{ rancher_rke_ssh_private_key_fullpath }}"
+    mode: 0600
+
+- name: Write rke kube template for rancher
+  template: 
+    src: "rancher-cluster-config.yml.j2"
+    dest: "{{ rancher_rke_dest }}/rancher-cluster-config-{{ansible_inventory_name}}.yml"
+    
+- name: Run RKE CMD to install Rancher Server
+  shell: "{{ rancher_rke_fullpath }} up --config {{ rancher_rke_dest }}/rancher-cluster-config-{{ansible_inventory_name}}.yml"
+  register: output_results
+  become: yes
+  become_user: root
+
+- debug:
+    msg: "{{ output_results.stdout_lines }}"

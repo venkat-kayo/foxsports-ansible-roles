@@ -1,0 +1,8 @@
+---
+- name: Add public ssh key to authorised users
+  authorized_key:
+    user: "{{ rancher_test_node_setup_user }}"
+    state: present
+    key: "{{ item }}"
+  with_file:
+  - id_rsa.pub

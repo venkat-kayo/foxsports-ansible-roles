@@ -1,0 +1,5 @@
+---
+- name: remove rke
+  file:
+    dest: ./rke
+    state: absent

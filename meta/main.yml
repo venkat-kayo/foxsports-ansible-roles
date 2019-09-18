@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: 
+  description: rancher role
+  company: Foxsports
+  license: license Private
+  min_ansible_version: 2.8.2
+
+  platforms:
+  - name: ubuntu
+    versions:
+     - bionic
+
+dependencies: []

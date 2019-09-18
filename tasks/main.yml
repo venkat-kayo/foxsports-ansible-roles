@@ -1,0 +1,3 @@
+---
+- include: install-rke.yml
+- include: install-rancher-k8s.yml

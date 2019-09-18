@@ -1,0 +1,75 @@
+---
+- hosts: all
+  connection: ssh
+  become: yes
+  become_user: root
+  gather_facts: yes
+  # remote_user: vagrant
+  environment:
+    http_proxy:  "{{ lookup('env','VAGRANT_HTTP_PROXY') }}"
+    https_proxy: "{{ lookup('env','VAGRANT_HTTP_PROXY') }}"
+    no_proxy:    "localhost, 127.0.0.1"
+  vars:
+    ansible_inventory_name: test
+    rancher_rke_ssh_private_key: |
+      -----BEGIN OPENSSH PRIVATE KEY-----
+      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
+      UBAg==
+      -----END OPENSSH PRIVATE KEY-----
+
+    rancher_host_list:
+      - 10.0.0.101
+      - 10.0.0.102
+      - 10.0.0.103
+
+  roles:
+    - role: rancher
+      rancher_repo_user: "{{ lookup('env','APRO_USER') }}"
+      rancher_repo_pass: "{{ lookup('env','APRO_PASS') }}"
+    - spec

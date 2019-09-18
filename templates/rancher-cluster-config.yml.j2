@@ -1,0 +1,80 @@
+{# nodes:
+  - address: 10.0.0.1
+    user: "{{ rancher_user }}"
+    role: 
+    - controlplane
+    - worker
+    - etcd #}
+ssh_key_path: {{ rancher_rke_ssh_private_key_fullpath }}
+
+nodes:
+{% for host in rancher_host_list %}
+  - address: {{ host }}
+    user: root 
+    role:
+    - controlplane
+    - worker
+    - etcd
+    
+{% endfor %} 
+
+
+{# nodes:
+{% for server in rancher_server_list %}
+  - address: {{server.ip}}
+    user: {{server.user}} 
+    role: [{{server.role}}] 
+    ssh_key_path: {{server.ssh_key_path}}
+{% endfor %} 
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h
+    retention: 24h
+
+nodes:
+    nodes:
+    - address: 1.1.1.1
+      user: ubuntu
+      role:
+      - controlplane
+      - etcd
+      ssh_key_path: /home/user/.ssh/id_rsa
+      port: 2222
+    - address: 2.2.2.2
+      user: ubuntu
+      role:
+      - worker
+      ssh_key: |-
+        -----BEGIN RSA PRIVATE KEY-----
+
+        -----END RSA PRIVATE KEY-----
+    - address: 3.3.3.3
+      user: ubuntu
+      role:
+      - worker
+      ssh_key_path: /home/user/.ssh/id_rsa
+      ssh_cert_path: /home/user/.ssh/id_rsa-cert.pub
+    - address: 4.4.4.4
+      user: ubuntu
+      role:
+      - worker
+      ssh_key_path: /home/user/.ssh/id_rsa
+      ssh_cert: |-
+        ssh-rsa-cert-v01@openssh.com AAAAHHNza...
+    - address: example.com
+      user: ubuntu
+      role:
+      - worker
+      hostname_override: node3
+      internal_address: 192.168.1.6
+      labels:
+        app: ingress
+
+
+private_registries:
+    - url: registry.com
+      user: Username
+      password: password
+      is_default: true #}
