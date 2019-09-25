@@ -1,5 +1,6 @@
 ---
 rancher_rke_version: v0.2.8
+rancher_version: v2.2.8
 
 rancher_rke_base_url: https://artifactory.foxsports.com.au/generic-artifacts/rancher/rke/{{ rancher_rke_version }}
 rancher_rke_url_darwin: "{{ rancher_rke_base_url }}/rke_darwin-amd64"
@@ -7,16 +8,26 @@ rancher_rke_url_debian: "{{ rancher_rke_base_url }}/rke_linux-amd64"
 
 rancher_user: root
 
-rancher_rke_dest: /tmp
+rancher_rke_dir: /tmp
 rancher_rke_filename: rke
-rancher_rke_fullpath: "{{ rancher_rke_dest }}/{{ rancher_rke_filename }}"
+rancher_rke_fullpath: "{{ rancher_rke_dir }}/{{ rancher_rke_filename }}"
+rancher_rke_config_filename: rancher-cluster-config-{{ansible_inventory_name}}
+rancher_kubeconfig_dir: "{{ rancher_rke_dir }}"
+rancher_kubeconfig_filename: kube_config_{{ rancher_rke_config_filename }}.yml
+rancher_kubeconfig_fullpath: "{{ rancher_rke_dir }}/{{ rancher_kubeconfig_filename }}"
+
 
 rancher_rke_ssh_private_key_filename: id_rsa_tmp
 
-rancher_rke_ssh_private_key_fullpath: "{{ rancher_rke_dest }}/{{ rancher_rke_ssh_private_key_filename }}"
+rancher_rke_ssh_private_key_fullpath: "{{ rancher_rke_dir }}/{{ rancher_rke_ssh_private_key_filename }}"
 
 # rancher_host_list: []
 
 ## Compulsory values 
 # rancher_repo_user: ""
 # rancher_repo_pass: ""
+
+rancher_use_private_docker_registry: yes
+rancher_docker_registry_endpoint: artifactory.foxsports.com.au:5003
+
+rancher_ingress_url: rancher-testing.foxsports.com.au

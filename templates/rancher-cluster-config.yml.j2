@@ -16,7 +16,17 @@ nodes:
     - worker
     - etcd
     
-{% endfor %} 
+{% endfor %}
+
+{% if rancher_use_private_docker_registry %}
+private_registries:
+- url: {{ rancher_docker_registry_endpoint }}
+{%   if rancher_docker_registry_password is defined %}
+  user: {{ rancher_docker_registry_username }}
+  password: {{ rancher_docker_registry_password }}
+{%   endif %}
+  is_default: true
+{% endif %}
 
 
 {# nodes:

@@ -1,29 +1,34 @@
 ---
-## will download and install the rke tool to setup up a kubernetes cluster remotely
+- name: Check if current rke version already downloaded
+  shell: "{{ rancher_rke_fullpath }} -v"
+  register: rke_check_result
+  changed_when: rke_check_result.rc != 0
+  ignore_errors: yes
 
-# Download for Linux
-- name: Download rke tool for Debian linux
-  get_url:
-    url: "{{ rancher_rke_url_debian }}"
-    dest: "{{ rancher_rke_fullpath }}"
-    url_username: "{{ rancher_repo_user }}"
-    url_password: "{{ rancher_repo_pass }}"
-    validate_certs: no
-    force: yes
-  when: ansible_os_family == "Debian"
+- name: Download current rke version
+  block:
+    - name: Download rke tool for Debian linux
+      get_url:
+        url: "{{ rancher_rke_url_debian }}"
+        dest: "{{ rancher_rke_fullpath }}"
+        url_username: "{{ rancher_repo_user }}"
+        url_password: "{{ rancher_repo_pass }}"
+        validate_certs: no
+        force: yes
+      when: ansible_os_family == "Debian"
 
-# Download for MacOs
-- name: Download rke tool for MacOS
-  get_url:
-    url: "{{ rancher_rke_url_darwin }}"
-    dest: "{{ rancher_rke_fullpath }}"
-    url_username: "{{ rancher_repo_user }}"
-    url_password: "{{ rancher_repo_pass }}"
-  when: ansible_os_family == "Darwin"
-    
-# set executable permissions
-- name: Ensure rke tool is executable
-  file: 
-    path: "{{ rancher_rke_fullpath }}"
-    state: file
-    mode: 0755
+    - name: Download rke tool for MacOS
+      get_url:
+        url: "{{ rancher_rke_url_darwin }}"
+        dest: "{{ rancher_rke_fullpath }}"
+        url_username: "{{ rancher_repo_user }}"
+        url_password: "{{ rancher_repo_pass }}"
+      when: ansible_os_family == "Darwin"
+        
+    # set executable permissions
+    - name: Ensure rke tool is executable
+      file: 
+        path: "{{ rancher_rke_fullpath }}"
+        state: file
+        mode: 0755
+  when: rke_check_result.rc != 0

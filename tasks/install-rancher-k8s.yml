@@ -8,13 +8,14 @@
 - name: Write rke kube template for rancher
   template: 
     src: "rancher-cluster-config.yml.j2"
-    dest: "{{ rancher_rke_dest }}/rancher-cluster-config-{{ansible_inventory_name}}.yml"
+    dest: "{{ rancher_rke_dir }}/{{ rancher_rke_config_filename }}.yml"
     
 - name: Run RKE CMD to install Rancher Server
-  shell: "{{ rancher_rke_fullpath }} up --config {{ rancher_rke_dest }}/rancher-cluster-config-{{ansible_inventory_name}}.yml"
+  shell: "{{ rancher_rke_fullpath }} up --config {{ rancher_rke_dir }}/{{ rancher_rke_config_filename }}.yml"
   register: output_results
   become: yes
   become_user: root
 
-- debug:
+- name: Output rke stdout
+  debug:
     msg: "{{ output_results.stdout_lines }}"

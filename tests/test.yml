@@ -67,9 +67,21 @@
       - 10.0.0.101
       - 10.0.0.102
       - 10.0.0.103
+  pre_tasks:
+  - name: Install prerequisite tools
+    snap:
+      name: "{{ item }}"
+      classic: yes
+    with_items:
+    - kubectl
+    - helm
 
   roles:
     - role: rancher
       rancher_repo_user: "{{ lookup('env','APRO_USER') }}"
       rancher_repo_pass: "{{ lookup('env','APRO_PASS') }}"
+      rancher_use_private_docker_registry: yes
+      rancher_docker_registry_endpoint: artifactory.foxsports.com.au:5003
+      rancher_docker_registry_username: "{{ lookup('env','APRO_USER') }}"
+      rancher_docker_registry_password: "{{ lookup('env','APRO_PASS') }}"
     - spec
