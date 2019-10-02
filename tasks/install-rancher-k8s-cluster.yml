@@ -4,11 +4,13 @@
     content: "{{ rancher_rke_ssh_private_key }}"
     dest: "{{ rancher_rke_ssh_private_key_fullpath }}"
     mode: 0600
+  notify: cleanup_rke_private_key
 
 - name: Write rke kube template for rancher
   template: 
     src: "rancher-cluster-config.yml.j2"
     dest: "{{ rancher_rke_dir }}/{{ rancher_rke_config_filename }}.yml"
+    mode: 0744
     
 - name: Run RKE CMD to install Rancher Server
   shell: "{{ rancher_rke_fullpath }} up --config {{ rancher_rke_dir }}/{{ rancher_rke_config_filename }}.yml"

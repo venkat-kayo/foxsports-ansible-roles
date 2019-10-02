@@ -53,7 +53,7 @@ end
 # To add forwarded ports - simply create an array of hashes as follows
 #    forwarded_ports = [{ guest: 8080, host: 11080 }, { guest: 8081, host: 11081}]
 # Which will forward the ports on Vagrantbox 8080/8081 to local box 11080/11081
-forwarded_ports = []
+forwarded_ports = [{ guest: 80, host: 8080 }, { guest: 443, host: 8443 }]
 
 Vagrant.configure("2") do |config|
   major_release_version = ENV['ANSIBLE_ROLE_MAJOR_RELEASE_VERSION'] || 'bionic'
@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
         vb.customize ['modifyvm', :id, '--memory', ram]
       end
       forwarded_ports.each do |port|
-        config.vm.network "forwarded_port", guest: port[:guest], host: port[:host]
+        config.vm.network "forwarded_port", guest: port[:guest], host: port[:host], auto_correct: true
       end
       conf.vm.network "private_network", ip: "10.0.0.10#{i}"
       conf.vm.provision :shell, inline: "cat /etc/os-release"
@@ -97,9 +97,9 @@ Vagrant.configure("2") do |config|
       vb.customize ['modifyvm', :id, '--memory', ram]
     end
 
-    forwarded_ports.each do |port|
-      config.vm.network "forwarded_port", guest: port[:guest], host: port[:host]
-    end
+    # forwarded_ports.each do |port|
+    #   config.vm.network "forwarded_port", guest: port[:guest], host: port[:host]
+    # end
     conf.vm.network "private_network", ip: "10.0.0.254"
 
     conf.vm.provision :shell, inline: "cat /etc/os-release"

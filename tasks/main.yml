@@ -1,4 +1,12 @@
 ---
 - include: install-rke.yml
-- include: install-rancher-k8s.yml
+  when: rancher_install_rancher_k8s_cluster
+
+- include: install-rancher-k8s-cluster.yml
+  when: rancher_install_rancher_k8s_cluster
+
+- include: install-helm-tiller.yml
+  when: rancher_install_rancher
+
 - include: install-rancher.yml
+  when: rancher_install_rancher

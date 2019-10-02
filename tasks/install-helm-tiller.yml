@@ -1,0 +1,37 @@
+---
+- name: Check if helm tiller installed on k8s cluster
+  shell: helm version
+  environment:
+    KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+  register: helm_tiller_check_result
+  changed_when: helm_tiller_check_result.rc != 0
+  ignore_errors: yes
+
+- name: Install helm tiller
+  block:
+    - name: Create service account for tiller
+      shell: kubectl -n kube-system create serviceaccount tiller
+      register: tiller_service_account_result
+      failed_when: 
+      - tiller_service_account_result.rc != 0
+      - tiller_service_account_result.stderr is not search( "already exists" )
+
+    - name: Create clusterbinding role for tiller
+      shell: kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+      register: tiller_clusterbinding_result
+      failed_when: 
+      - tiller_clusterbinding_result.rc != 0
+      - tiller_clusterbinding_result.stderr is not search( "already exists" )
+    
+    - name: Deploy helm tiller container
+      shell: helm init --service-account tiller
+
+    - name: Verify helm tiller has installed
+      shell: helm version
+      register: verify_helm_install_result
+      until: verify_helm_install_result.rc == 0
+      retries: 100
+      delay: 3
+  environment:
+    KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+  when: helm_tiller_check_result.rc != 0 and helm_tiller_check_result.stderr is search("could not find tiller")

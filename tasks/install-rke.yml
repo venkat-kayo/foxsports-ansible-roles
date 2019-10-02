@@ -7,6 +7,12 @@
 
 - name: Download current rke version
   block:
+    - name: Ensure dir for rke exists
+      file:
+        dest: "{{ rancher_rke_dir }}"
+        state: directory
+        mode: 0755
+
     - name: Download rke tool for Debian linux
       get_url:
         url: "{{ rancher_rke_url_debian }}"
@@ -28,7 +34,7 @@
     # set executable permissions
     - name: Ensure rke tool is executable
       file: 
-        path: "{{ rancher_rke_fullpath }}"
+        dest: "{{ rancher_rke_fullpath }}"
         state: file
         mode: 0755
   when: rke_check_result.rc != 0

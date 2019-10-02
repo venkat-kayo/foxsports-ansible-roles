@@ -30,6 +30,17 @@ Requirements file:
 The following variables need to be set when using this role:
 
 ```yaml
+rancher_rke_ssh_private_key: |
+    -----BEGIN OPENSSH PRIVATE KEY-----
+      Some key here
+      -----END OPENSSH PRIVATE KEY-----
+
+rancher_host_list:
+      - 10.0.0.101
+      - 10.0.0.102
+      - 10.0.0.103
+
+rancher_environment: test
 
 ```
 

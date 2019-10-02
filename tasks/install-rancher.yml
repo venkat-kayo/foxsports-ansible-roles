@@ -1,7 +1,6 @@
 ---
-  
-- name: Run helm CMD to install rancher chart repo
-  command: helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+- name: Add rancher chart repo to helm
+  shell: helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
   environment:
     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
   register: output_results
@@ -9,30 +8,8 @@
 - debug:
     msg: "{{ output_results.stdout_lines }}"
 
-# - name: Wait until tiller pod is running
-#   shell: kubectl -n kube-system get po |grep tiller |grep -i running
-#   register: tiller_running_check_result
-#   until: tiller_running_check_result.rc == 0
-#   retries: 20
-#   delay: 1
-
-
-# - name: Run helm CMD to install certmanager
-#   command: helm install stable/cert-manager --name cert-manager --namespace kube-system
-#   environment:
-#     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
-#   register: output_results
-
-# - debug:
-#     msg: "{{ output_results.stdout_lines }}"
-
-    
-# ## Allow time for cert mananger to come up (change to poll status!)
-# - pause:
-#     minutes: 2
-
-- name: Run helm CMD to install rancher-server
-  command: helm install rancher-stable/rancher --name rancher --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
+- name: Deploy rancher to rancher k8s cluster via helm
+  shell: helm upgrade -i rancher rancher-stable/rancher  --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
   environment:
     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
   register: output_results
@@ -40,13 +17,19 @@
 - debug:
     msg: "{{ output_results.stdout_lines }}"
 
-    
-# ## Allow time for rancher-server to come up (change to poll status!)
-# - pause:
-#     minutes: 2
+- name: Verify Rancher successfully deployed to rancher k8s cluster
+  shell: kubectl -n cattle-system get po --no-headers |grep -i rancher |grep -i running |wc -l
+  ignore_errors: yes
+  environment:
+    KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+  register: verify_rancher_install_result
+  until: verify_rancher_install_result.stdout is search( rancher_host_list | length | string )
+  retries: 100
+  delay: 3
+
 
 # - name: Run kubectl CMD to install tls secrets
-#   command: kubectl -n cattle-system create secret tls tls-rancher-ingress --cert="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.crt" --key="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.key"
+#   shell: kubectl -n cattle-system create secret tls tls-rancher-ingress --cert="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.crt" --key="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.key"
 #   environment:
 #     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
 #   register: output_results

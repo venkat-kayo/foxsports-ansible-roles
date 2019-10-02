@@ -1,5 +1,5 @@
 ---
-- name: remove rke
+- name: cleanup_rke_private_key
   file:
-    dest: ./rke
+    dest: "{{ rancher_rke_ssh_private_key_fullpath }}"
     state: absent
