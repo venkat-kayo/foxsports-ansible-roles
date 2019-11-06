@@ -9,7 +9,7 @@
     msg: "{{ output_results.stdout_lines }}"
 
 - name: Deploy rancher to rancher k8s cluster via helm
-  shell: helm upgrade -i rancher rancher-stable/rancher  --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
+  shell: helm upgrade -i rancher rancher-stable/rancher --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
   environment:
     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
   register: output_results

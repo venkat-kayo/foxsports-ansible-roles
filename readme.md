@@ -42,6 +42,8 @@ rancher_host_list:
 
 rancher_environment: test
 
+rancher_ingress_url: rancher-test.domain
+
 ```
 
 ## Optional Variables
@@ -49,7 +51,15 @@ rancher_environment: test
 The following are defaults that can be overridden:
 
 ```yaml
+rancher_rke_ssh_private_key_exists: yes
+rancher_rke_ssh_private_key_fullpath: path/to/pre-existing/ssh/private/key
 
+
+rancher_docker_registry_username: apro_username
+rancher_docker_registry_password: apro_password
+
+rancher_repo_user: apro_username
+rancher_repo_pass: apro_password
 ```
 
 ## Testing
