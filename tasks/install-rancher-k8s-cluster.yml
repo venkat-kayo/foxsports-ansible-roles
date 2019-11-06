@@ -16,8 +16,6 @@
 - name: Run RKE CMD to install Rancher Server
   shell: "{{ rancher_rke_fullpath }} up --config {{ rancher_rke_dir }}/{{ rancher_rke_config_filename }}.yml"
   register: output_results
-  become: yes
-  become_user: root
 
 - name: Output rke stdout
   debug:

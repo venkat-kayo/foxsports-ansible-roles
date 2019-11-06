@@ -51,6 +51,9 @@ rancher_ingress_url: rancher-test.domain
 The following are defaults that can be overridden:
 
 ```yaml
+rancher_rke_version: v0.3.2
+rancher_version: v2.3.2
+
 rancher_rke_ssh_private_key_exists: yes
 rancher_rke_ssh_private_key_fullpath: path/to/pre-existing/ssh/private/key
 

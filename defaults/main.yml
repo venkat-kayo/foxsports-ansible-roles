@@ -2,8 +2,8 @@
 rancher_install_rancher_k8s_cluster: yes
 rancher_install_rancher: yes
 
-rancher_rke_version: v0.2.8
-rancher_version: v2.2.8
+rancher_rke_version: v0.3.2
+rancher_version: v2.3.2
 
 rancher_rke_base_url: https://artifactory.foxsports.com.au/generic-artifacts/rancher/rke/{{ rancher_rke_version }}
 rancher_rke_url_darwin: "{{ rancher_rke_base_url }}/rke_darwin-amd64"
