@@ -3,13 +3,28 @@
   shell: helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
   environment:
     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+    HTTPS_PROXY: "{{ rancher_https_proxy }}"
   register: output_results
 
 - debug:
     msg: "{{ output_results.stdout_lines }}"
 
+- name: Ensure dir for rancher chart exists
+  file:
+    dest: "{{ rancher_chart_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Download rancher chart
+  shell: "helm fetch rancher-stable/rancher --untar --untardir {{ rancher_chart_dir }}"
+  environment:
+    KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+    HTTPS_PROXY: "{{ rancher_https_proxy }}"
+
 - name: Deploy rancher to rancher k8s cluster via helm
-  shell: helm upgrade -i rancher rancher-stable/rancher --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
+  shell: helm upgrade -i rancher rancher --namespace cattle-system --set hostname={{ rancher_ingress_url }} --set ingress.tls.source=secret --set rancherImageTag={{rancher_version}}
+  args:
+    chdir: "{{ rancher_chart_dir }}"
   environment:
     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
   register: output_results

@@ -34,3 +34,6 @@ rancher_rke_ssh_private_key_fullpath: "{{ rancher_rke_dir }}/{{ rancher_rke_ssh_
 
 rancher_use_private_docker_registry: yes
 rancher_docker_registry_endpoint: artifactory.foxsports.com.au:5003
+
+rancher_https_proxy: ""
+rancher_chart_dir: /tmp/rancher_chart
