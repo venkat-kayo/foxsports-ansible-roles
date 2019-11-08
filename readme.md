@@ -31,7 +31,7 @@ The following variables need to be set when using this role:
 
 ```yaml
 rancher_rke_ssh_private_key: |
-    -----BEGIN OPENSSH PRIVATE KEY-----
+      -----BEGIN OPENSSH PRIVATE KEY-----
       Some key here
       -----END OPENSSH PRIVATE KEY-----
 
@@ -43,6 +43,17 @@ rancher_host_list:
 rancher_environment: test
 
 rancher_ingress_url: rancher-test.domain
+
+rancher_cert: |
+      -----BEGIN CERTIFICATE-----
+      TLS cert here
+      -----END CERTIFICATE-----
+
+
+rancher_cert_key: |
+      -----BEGIN PRIVATE KEY-----
+      matching cert private key here
+      -----END PRIVATE KEY-----
 
 ```
 

@@ -42,12 +42,3 @@
   retries: 100
   delay: 3
 
-
-# - name: Run kubectl CMD to install tls secrets
-#   shell: kubectl -n cattle-system create secret tls tls-rancher-ingress --cert="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.crt" --key="{{ rancher_rke_dir }}/roles/rancher/files/foxsportswildcard.key"
-#   environment:
-#     KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
-#   register: output_results
-
-# - debug:
-#     msg: "{{ output_results.stdout_lines }}"

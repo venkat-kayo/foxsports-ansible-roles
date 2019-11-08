@@ -10,3 +10,6 @@
 
 - include: install-rancher.yml
   when: rancher_install_rancher
+
+- include: install-rancher-tls-certs.yml
+  when: rancher_install_rancher

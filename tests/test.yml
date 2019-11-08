@@ -69,6 +69,9 @@
       - 10.0.0.103
 
     rancher_ingress_url: localhost
+    rancher_cert: ""
+    rancher_cert_key: ""
+
   pre_tasks:
   - name: Install prerequisite tools
     snap:
@@ -86,6 +89,6 @@
       rancher_docker_registry_endpoint: artifactory.foxsports.com.au:5003
       rancher_docker_registry_username: "{{ lookup('env','APRO_USER') }}"
       rancher_docker_registry_password: "{{ lookup('env','APRO_PASS') }}"
-      # rancher_install_rancher_k8s_cluster: no
+      rancher_install_rancher_k8s_cluster: no
       # rancher_install_rancher: no
     - spec

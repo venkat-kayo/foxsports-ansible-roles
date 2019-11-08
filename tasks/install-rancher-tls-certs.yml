@@ -1,0 +1,23 @@
+---
+- name: Decrypt ingress tls cert
+  copy:
+    content: "{{ rancher_cert }}"
+    dest: "{{ rancher_cert_fullpath }}"
+    mode: 0600
+  notify: cleanup_rancher_cert
+
+- name: Decrypt ingress tls cert key
+  copy:
+    content: "{{ rancher_cert_key }}"
+    dest: "{{ rancher_cert_key_fullpath }}"
+    mode: 0600
+  notify: cleanup_rancher_cert_key
+
+- name: Run kubectl CMD to install tls secrets
+  shell: kubectl -n cattle-system create secret tls tls-rancher-ingress --cert="{{ rancher_cert_fullpath }}" --key="{{ rancher_cert_key_fullpath }}"
+  environment:
+    KUBECONFIG: "{{ rancher_kubeconfig_fullpath }}"
+  register: output_results
+
+- debug:
+    msg: "{{ output_results.stdout_lines }}"

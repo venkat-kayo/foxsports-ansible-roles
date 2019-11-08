@@ -37,3 +37,11 @@ rancher_docker_registry_endpoint: artifactory.foxsports.com.au:5003
 
 rancher_https_proxy: ""
 rancher_chart_dir: /tmp/rancher_chart
+
+# rancher_cert: CONTAINS CERT CONTENTS
+rancher_cert_filename: cert.crt
+rancher_cert_fullpath: "{{ rancher_rke_dir }}/{{ rancher_cert_filename }}"
+
+# rancher_cert_key: CONTAINS KEY CONTENTS
+rancher_cert_key_filename: key.key
+rancher_cert_key_fullpath: "{{ rancher_rke_dir }}/{{ rancher_cert_key_filename }}"
